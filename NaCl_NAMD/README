@@ -1,0 +1,3 @@
+It is known that the sodium chloride disassociates in water.
+Using Umbrella sampling, compute the free energy profile of NaCl dissociation as a function of distance between Na+ and Cl- ions.
+Use a water box of 256 TIP4P molecules, and Amber forcefield.

@@ -1,0 +1,68 @@
+#############################################################
+## JOB DESCRIPTION                                         ##
+#############################################################
+
+# SMD simulation (stretching) of deca-alanine in vacuum
+# Constant temperature
+
+#############################################################
+## ADJUSTABLE PARAMETERS                                   ##
+#############################################################
+
+structure          ionized.psf
+coordinates        ionized.pdb
+outputName         output7
+
+set temperature    300
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Input
+paraTypeCharmm	    on
+parameters          test_water_ions.inp
+
+
+
+temperature         $temperature
+ 
+# Force-Field Parameters
+########################
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              12.0
+switching           on
+switchdist          10.0
+pairlistdist        13.5
+
+# Integrator Parameters
+timestep            2.0  ;# 2fs/step
+rigidBonds          all  ;# needed for 2fs steps
+nonbondedFreq	    1
+fullElectFrequency  2  
+stepspercycle       10
+
+# Constant Temperature Control
+langevin            on    ;# do langevin dynamics
+langevinDamping     1     ;# damping coefficient (gamma) of 1/ps
+langevinTemp        $temperature
+langevinHydrogen    no    ;# don't couple langevin bath to hydrogens
+
+# Output
+binaryoutput        no
+dcdfreq             500     ;# 500steps = every 1ps
+outputEnergies      100
+
+#############################################################
+## EXTRA PARAMETERS                                        ##
+#############################################################
+
+colvars on
+colvarsConfig colvars.conf
+
+minimize 100
+reinitvels $temperature
+
+
+run 2500 ;# 5 ps

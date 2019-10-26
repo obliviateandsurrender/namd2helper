@@ -1,0 +1,22 @@
+MASS   150 HA    1.00800 H ! N-ter H (ammonia)HCO
+MASS   156 CT3  12.00700 C ! ammonia nitrogen  CO
+
+default first none last none
+
+RESI METH   0.00   ! METHANE 
+GROUP
+!ATOM N1   N0   -1.125
+ATOM CB   CT3  -0.560000  ! CT3 -0.560000 12.0110 0 
+ATOM HB1  HA    0.140000     !       2 METH 1 METH HB1 HA 0.140000 1.00800 0 
+ATOM HB2  HA    0.140000    !375
+ATOM HB3  HA    0.140000     !375
+ATOM HB4  HA    0.140000
+!BOND N1 H11 N1 H12 N1 H13
+BOND CB  HB1  CB HB2  CB HB3  CB HB4
+IC   HB4  HB3  HB1  CB  HB2    0.0   0.0    0.0   109. 0.0
+IC   HB1  HB2  HB4  CB  HB3    0.0   0.0    0.0   109. 0.0
+IC   HB2  HB3  HB4  CB  HB1    0.0   0.0    0.0   109. 0.0
+IC   HB2  HB3  HB1  CB  HB4    0.0   0.0    0.0   109. 0.0
+PATC FIRS NONE LAST NONE
+
+END

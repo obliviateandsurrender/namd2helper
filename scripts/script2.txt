@@ -1,0 +1,144 @@
+#JOB DESCRIPTION                                         ##
+#############################################################
+
+# dapc equilibration
+
+
+#############################################################
+## ADJUSTABLE PARAMETERS                                   ##
+#############################################################
+
+structure    xxx.psf 
+coordinates  xxx.pdb
+#binvelocities min_mem.vel
+
+#set start_temperature   x
+set hold_temperature    x
+set outputname min_mem.md
+
+firsttimestep      0
+
+
+#############################################################
+## SIMULATION PARAMETERS                                   ##
+#############################################################
+
+# Input
+paraTypeCharmm      on
+parameters          p.prm
+temperature         x
+
+
+# Force-Field Parameters
+exclude             scaled1-4
+1-4scaling          1.0
+cutoff              14.0
+switching           on
+switchdist          12.0 #Cutoff-2
+pairlistdist        16.0  #Cutoff+2
+stepspercycle       10
+margin 2.5
+
+
+# Integrator Parameters
+timestep            2.0  ;# 1fs/step
+rigidBonds          all  ;# needed for 2fs steps
+nonbondedFreq       1
+fullElectFrequency  2
+useSettle           on   ;#If rigid bonds are enabled use
+#non-interactive SETTLE alg to keep waters rigid
+
+
+# Constant Temperature Control
+langevin            on    ;# do langevin dynamics
+langevinDamping     5     ;# damping coefficient (gamma) of 5/ps
+langevinHydrogen    no    ;# don't couple langevin bath to hydrogens
+langevinTemp        x ;#langevin temperature is
+#defined in protocol section
+
+#Affects the output. Wrapping does not affect the simulation.
+wrapWater           on
+wrapAll             on
+
+
+#Pressure Control
+useGroupPressure yes ;# needed for rigidBonds
+useFlexibleCell no
+useConstantArea no
+
+langevinPiston        on
+langevinPistonTarget  1.01325 ;#  in bar -> 1 atm
+langevinPistonPeriod  100.
+langevinPistonDecay   50.
+langevinPistonTemp    x
+
+# Periodic Boundary Conditions
+cellBasisVector1 96.87   0   0
+cellBasisVector2 0   74.57   0
+cellBasisVector3 0    0   110.68
+cellOrigin 0.0   0.0   0.0
+
+#PME (for full-system periodic electrostatics)
+PME                 yes
+PMEGridSpacing      1.0 ;#Using good default. Let NAMD set the grid.
+
+PMEGridSizeX        100  
+PMEGridSizeY        80
+PMEGridSizeZ        120 
+
+# Output
+binaryoutput	   on
+outputName         xx
+
+restartfreq 2500
+dcdfreq 2500
+xstFreq 2500
+outputEnergies 2500
+outputPressure 2500
+
+
+#############################################################
+## EXTRA PARAMETERS                                        ##
+#############################################################
+
+constraints off
+
+#############################################################
+
+
+#############################################################
+## EXECUTION SCRIPT                                        ##
+#############################################################
+
+# Minimization # ( 20 ps )
+minimize            10000
+
+# heat with CAs restrained
+# langevin	on
+run 3000
+output heat 
+
+#RELAXATION PROTOCOL
+#35000 steps
+# 14 frames (dcdfreq=2500)
+# 70 ps     (timestep=2fs)
+
+# Heat +1K in 0.4ps
+#for { set TEMP 0 } { $TEMP < x } {
+#incr TEMP 1 } {
+#       langevinTemp x
+#       reinitvels x
+#       run 200
+#}
+
+#Adjust environment to final conditions
+langevinTemp x
+reinitvels x
+
+#Constraints release protocol
+
+
+#Free dynamics for 50 ps
+constraintScaling 0
+run 25000
+

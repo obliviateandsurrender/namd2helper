@@ -1,0 +1,17 @@
+# VMD for WIN32, version 1.8.6 (April 7, 2007)
+# Log file 'psfCH4.pgn', created by user dale
+package require psfgen
+#topology top_all27_prot_lipid.inp
+topology top_methane.inp
+#alias residue HOH TIP3   evidently these 2 not needed
+#alias atom HOH O OH2
+alias residue CH4 METH
+alias atom CH4 CB CT3
+
+segment MET {pdb CH4.pdb}
+coordpdb CH4.pdb MET
+
+guesscoord
+writepdb mm.pdb
+writepsf mm.psf
+exit

@@ -1,0 +1,5 @@
+REMARK CRYST1   96.541   96.541   94.622  90.00  90.00 120.00 P 1           1
+ATOM      1  N1  AMM1X 401      52.004 -12.697 -42.836  1.00  0.00            N
+END
+# mod 1N after yi>AMM1X
+# evidently "N1  AMM1X" can be "N1  AMM1" above
